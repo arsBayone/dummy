@@ -1,13 +1,21 @@
 // src/components/Counter.js
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 const Counter = () => {
   const [count, setCount] = useState(0);
   const [inputData, setInputData] = useState("");
+  const [users, setUsers] = useState([]);
+
+  useEffect(() => {
+    fetch("https://jsonplaceholder.typicode.com/users")
+      .then((res) => res.json())
+      .then((data) => setUsers(data))
+      .catch((err) => console.error("API fetch error:", err));
+  }, []);
 
   return (
     <div>
-      <h1>React counter gjdb</h1>
+      <h1>React counter gjdbakjdja</h1>
       <h3>Add new</h3>
       <h3>Add 2</h3>
       {/* <h3>Added</h3> */}
@@ -27,6 +35,15 @@ const Counter = () => {
       <button onClick={() => setCount(count + 1)} data-testid="increment">
         Increment
       </button>
+
+      <h2>Users</h2>
+      <ul data-testid="user-list">
+        {users.map((user) => (
+          <li key={user.id} data-testid="user-item">
+            {user.name}
+          </li>
+        ))}
+      </ul>
     </div>
   );
 };

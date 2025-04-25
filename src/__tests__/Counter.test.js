@@ -14,6 +14,7 @@ test("renders counter with initial value", () => {
   console.log("test 1 ************");
   render(<Counter />);
   const text = screen.getByText(/React Counter/i);
+  // const text = screen.getByText("React Counter");
   const image = screen.getByTitle("React image");
   expect(text).toBeInTheDocument();
   expect(image).toBeInTheDocument();
@@ -46,7 +47,6 @@ test("increments counter on button click", () => {
 describe("ui test", () => {
   test("input change", () => {
     console.log("test 3 ************");
-
     render(<Counter />);
     const inputbox = screen.getByRole("textbox");
     fireEvent.change(inputbox, { target: { value: "test" } });
@@ -69,3 +69,29 @@ describe("ui test", () => {
 // afterAll(() => {
 //   console.log("after All tests ************8");
 // });
+
+test("fetches and displays users", async () => {
+  console.log("test 4 ************");
+  const fakeUsers = [
+    { id: 1, name: "John Doe" },
+    { id: 2, name: "Jane Smith" },
+  ];
+
+  // Mock global fetch
+  global.fetch = jest.fn(() =>
+    Promise.resolve({
+      json: () => Promise.resolve(fakeUsers),
+    })
+  );
+
+  render(<Counter />);
+
+  // Wait for the list items to appear
+  const items = await screen.findAllByTestId("user-item");
+  expect(items).toHaveLength(fakeUsers.length);
+  expect(screen.getByText("John Doe")).toBeInTheDocument();
+  expect(screen.getByText("Jane Smith")).toBeInTheDocument();
+
+  // Clean up mock
+  global.fetch.mockClear();
+});
