@@ -13,6 +13,8 @@ const Counter = () => {
       .catch((err) => console.error("API fetch error:", err));
   }, []);
 
+  //console.log("users", users);
+
   return (
     <div>
       <h1>React counter gjdbakjdja</h1>
